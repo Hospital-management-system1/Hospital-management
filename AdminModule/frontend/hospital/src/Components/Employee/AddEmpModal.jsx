@@ -1,30 +1,61 @@
 import React, { useState, useEffect } from "react";
 
-const AddEmpModal = () => {
-  const [room_id, setRoom_id] = useState("");
-  const [room_name, setRoom_name] = useState("");
+const AddEmpModal = ({ getData }) => {
+  const [emp_id, setEmp_id] = useState("");
+  const [emp_name, setEmp_name] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [img, setImage] = useState(null);
+  const [image, setImage] = useState(null);
 
-  const postRole = () => {
-    let data = {
-      room_id,
-      room_name,
-      email,
-      password,
-      img
-    };
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+    }
+  };
+
+  // const postRole = () => {
+  //   let data = {
+  //     emp_id,
+  //     emp_name,
+  //     email,
+  //     password,
+  //     image
+  //   };
+  //   fetch(`http://localhost:5999/postEmp`, {
+  //     method: "POST",
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(data),
+  //   })
+  //     .then((result) => {
+  //       console.log(result);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error saving data:", error);
+  //     });
+  // };
+
+  const postEmp = (e) => {
+    e.preventDefault(); // Prevent the form from reloading the page
+
+    const data = new FormData();
+    data.append("emp_id", emp_id);
+    data.append("emp_name", emp_name);
+    data.append("email", email);
+    data.append("password", password);
+    data.append("image", image);
+
     fetch("http://localhost:5999/postEmp", {
       method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
+      body: data,
     })
       .then((result) => {
         console.log(result);
+        document.getElementById(`my_modal_room`).close();
+        getData();
       })
       .catch((error) => {
         console.error("Error saving data:", error);
@@ -56,7 +87,7 @@ const AddEmpModal = () => {
         <dialog id={`my_modal_room`} className="modal">
           <div className="modal-box">
             <h3 className="font-bold text-lg">Add New Employee</h3>
-            <form onSubmit={() => postRole()}>
+            <form onSubmit={postEmp}>
               <label className="input input-bordered flex items-center gap-2 mb-2">
                 Employee Id
                 <input
@@ -64,7 +95,7 @@ const AddEmpModal = () => {
                   className="grow"
                   placeholder="Enter Employee Id"
                   onChange={(e) => {
-                    setRoom_id(e.target.value);
+                    setEmp_id(e.target.value);
                   }}
                 />
               </label>
@@ -75,10 +106,10 @@ const AddEmpModal = () => {
                   className="grow"
                   placeholder="Enter Empoloyee Name"
                   onChange={(e) => {
-                    setRoom_name(e.target.value);
+                    setEmp_name(e.target.value);
                   }}
                 />
-              </label>           
+              </label>
               <label className="input input-bordered flex items-center gap-2 mb-2">
                 Email
                 <input
@@ -89,7 +120,7 @@ const AddEmpModal = () => {
                     setEmail(e.target.value);
                   }}
                 />
-              </label>           
+              </label>
               <label className="input input-bordered flex items-center gap-2 mb-2">
                 Password
                 <input
@@ -100,16 +131,16 @@ const AddEmpModal = () => {
                     setPassword(e.target.value);
                   }}
                 />
-              </label>           
+              </label>
               <label className="input input-bordered flex items-center gap-2 mb-2">
                 Image
                 <input
                   type="file"
                   className="grow"
-                //   placeholder="Enter Empoloyee Name"
-                onChange={(e) => setImage(e.target.files[0])}
+                  //   placeholder="Enter Empoloyee Name"
+                  onChange={handleFileChange}
                 />
-              </label>           
+              </label>
               <button type="submit" className="btn mt-2">
                 Submit
               </button>

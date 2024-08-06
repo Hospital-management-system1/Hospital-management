@@ -5,6 +5,7 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 
+
 const getAdmin = (req, res) => {
   let sql = `SELECT * FROM login ORDER BY name`;
   connection.query(sql, function (error, result) {
@@ -41,8 +42,7 @@ const loginAdmin = (req, res) => {
       console.error('Database query error', err);
       return res.json({ Error: "Login error in server" });
     }
-    // console.log(req.body);
-
+    // console.log(result);
     if (result.rows.length > 0) {
       const user = result.rows[0];
       bcrypt.compare(req.body.password.toString(), user.password, (err, response) => {
@@ -50,10 +50,24 @@ const loginAdmin = (req, res) => {
           console.error('Password comparison error', err);
           return res.json({ Error: "Password compare error" });
         }
-
         if (response) {
-
-          return res.json({ Status: "Success" });
+         
+          const storeData= {
+            email:result.rows[0].email,
+            name:result.rows[0].name
+          }
+          
+          const token = jwt.sign(storeData,"jwt-secret-key-is-here",{expiresIn:'1h'
+          })
+          const option = {
+            expires: new Date(Date.now() + 1 * 1 * 60 * 60 * 1000),
+            secure:true,
+            httpOnly:true,
+            sameSite:"none",
+            path:'/'
+          };
+          res.cookie('admintoken',token,option);
+          res.status(200).json("token generate")
         } else {
           return res.json({ Error: "Password not matched" });
         }
@@ -64,5 +78,40 @@ const loginAdmin = (req, res) => {
   });
 };
 
+const tokenVeification = (req, res, next) => {
+  const token = req.cookies.admintoken;
+  if(!token){
+    res.status(400).json("token not found")
+  } else{
+    try {
+      const decodeToken = jwt.verify(token, "jwt-secret-key-is-here" );
+      req.name = decodeToken.name;
+      req.email = decodeToken.email;
+      next()
+    } catch (error) {
+      console.log("server error", error)
+    }
+  }
+}
 
-module.exports = { getAdmin, postAdmin, loginAdmin };
+const finalVerification = (req, res) => {
+  return(
+    res.json({
+      name:req.name,
+      email:req.email,
+      message:'Success'
+    })
+  )
+}
+
+const logoutAdmin = async (req , res) => {
+  try{
+    res.clearCookie('admintoken');
+    return res.json({Status: "Success"});
+  }catch(error){
+    console.log("error logout");
+  }
+}
+
+
+module.exports = { getAdmin, postAdmin, loginAdmin, tokenVeification, finalVerification,logoutAdmin };

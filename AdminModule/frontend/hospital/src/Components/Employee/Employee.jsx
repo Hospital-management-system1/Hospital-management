@@ -3,7 +3,6 @@ import AddEmpModal from "./AddEmpModal";
 import EditEmp from "./EditEmp";
 import RoleAssign from "./RoleAssign";
 
-
 const Employee = () => {
   const [data, setData] = useState([]);
 
@@ -44,7 +43,7 @@ const Employee = () => {
               <th className="text-center text-base">Employee ID</th>
               <th className="text-center text-base">Name</th>
               <th className="text-center text-base">Email</th>
-              {/* <th className="text-center text-base">Password</th> */}
+              <th className="text-center text-base">Password</th>
               <th className="text-center text-base">Image</th>
               <th className="text-center text-base">Assign Role</th>
               <th className="text-center text-base">Action</th>
@@ -57,13 +56,17 @@ const Employee = () => {
                   <td className="text-center">{currEle.emp_id}</td>
                   <td className="text-center">{currEle.emp_name}</td>
                   <td className="text-center">{currEle.email}</td>
-                  {/* <td className="text-center">{currEle.password}</td> */}
+                  <td className="text-center">{currEle.password}</td>
                   <td className="text-center  h-10 w-10 br-2">
-                    <img className="rounded-full" src={currEle.img} alt="" />
+                    <div className="avatar">
+                      <div className=" w-12 rounded-full ">
+                        <img src={currEle.img}/>
+                      </div>
+                    </div>
                   </td>
                   {/* Role Assign */}
                   <td className="text-center">
-                    <RoleAssign emp_id={currEle.emp_id}/>
+                    <RoleAssign emp_id={currEle.emp_id} />
                   </td>
                   <td className="text-center">
                     <div>
@@ -97,7 +100,7 @@ const Employee = () => {
           </tbody>
         </table>
         <div className="text-center mt-8">
-          <AddEmpModal/>
+          <AddEmpModal getData={getData}/>
         </div>
       </div>
     </div>

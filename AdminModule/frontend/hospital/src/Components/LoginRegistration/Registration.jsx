@@ -27,7 +27,7 @@ const RegistrationForm = () => {
       if (response.ok) {
         setMessage("Registration successful!");
         setTimeout(() => {
-          navigate("/login");
+          navigate("/");
         }, 2000); // Redirect to login after 2 seconds
       } else {
         setMessage(result.Error || "Registration failed. Please try again.");
@@ -44,12 +44,26 @@ const RegistrationForm = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div
+      className="flex items-center justify-center min-h-screen bg-gray-100"
+      style={{
+        backgroundImage:
+          "url(https://images.unsplash.com/photo-1502740479091-635887520276?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center center",
+      }}
+    >
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-lg">
-        <h2 className="text-3xl font-bold text-center text-indigo-600">Sign Up</h2>
+        <h2 className="text-3xl font-bold text-center text-indigo-600">
+          Sign Up
+        </h2>
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700"
+            >
               Name
             </label>
             <input
@@ -63,7 +77,10 @@ const RegistrationForm = () => {
             />
           </div>
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
               Email
             </label>
             <input
@@ -77,7 +94,10 @@ const RegistrationForm = () => {
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
               Password
             </label>
             <input
@@ -98,15 +118,15 @@ const RegistrationForm = () => {
               Sign up
             </button>
             <p className="text-sm text-gray-600">
-              Already have an account? 
-              <Link to="/login" className="ml-1 text-indigo-600 hover:underline">Login here</Link>
+              Already have an account?
+              <Link to="/" className="ml-1 text-indigo-600 hover:underline">
+                Login here
+              </Link>
             </p>
           </div>
         </form>
         {message && (
-          <div className="mt-4 text-center text-red-500">
-            {message}
-          </div>
+          <div className="mt-2 ml-4 text-center text-red-500">{message}</div>
         )}
       </div>
     </div>

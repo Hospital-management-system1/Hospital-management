@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
-import { useTable, useSortBy, usePagination } from "react-table";
+import { useTable, useSortBy, usePagination, useGlobalFilter } from "react-table";
 import AddDepartment from "./AddDepartment";
 import EditDepartment from "./EditDepartment";
+
 
 const Department = () => {
     const [data, setData] = useState([]);
@@ -62,9 +63,11 @@ const Department = () => {
       pageCount,
       state,
       prepareRow,
-    } = useTable({ columns, data }, useSortBy, usePagination);
+      setPageSize,
+      setGlobalFilter,
+    } = useTable({ columns, data },useGlobalFilter,  useSortBy, usePagination);
   
-    const { pageIndex } = state;
+    const { pageIndex, pageSize, globalFilter } = state;
   
     return (
       <div>
@@ -77,6 +80,46 @@ const Department = () => {
             <AddDepartment/>
             
           </div>
+          <div className="flex items-center justify-end pb-2 mx-20 mt-2 shadow-sm">
+          <div className="flex items-center gap-1 mr-4">
+            <span>Show</span>
+            <select
+              className="select select-bordered select-sm"
+              value={pageSize}
+              onChange={(e) => setPageSize(Number(e.target.value))}
+            >
+              {[5,10,15,20].map((pageSize) => (
+                <option key={pageSize} value={pageSize}>
+                  {pageSize}
+                </option>
+              ))}
+            </select>
+            <span>Enrties</span>
+          </div>
+          <div>
+            <label className="flex items-center gap-2 input input-sm input-bordered">
+              <input
+                type="text"
+                className="grow"
+                placeholder="Search"
+                value={globalFilter || ""}
+                onChange={(e) => setGlobalFilter(e.target.value)}
+              />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 16 16"
+                fill="currentColor"
+                className="w-4 h-4 opacity-70"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </label>
+          </div>
+        </div>
           <div className="overflow-x-auto">
             <table {...getTableProps()} className="table">
               <thead>

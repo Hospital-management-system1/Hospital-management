@@ -1,7 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Outlet, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5999/loginVerify")
+      .then((result) => {
+        if (result.data.message === "Success") {
+          setData(result.data);
+          Swal.fire({
+            position: "top",
+            icon: "success",
+            title: "Successfully Loged In",
+            showConfirmButton: false,
+            timer: 1000,
+          });
+        } else {
+          navigate("/");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        navigate("/");
+      });
+  }, []);
+
+  const logout = () => {
+    axios
+      .post("http://localhost:5999/logoutAdmin")
+      .then((result) => {
+        if (result.data.Status === "Success") {
+          Swal.fire({
+            position: "top",
+            icon: "success",
+            title: "Logged Out",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          navigate("/");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const handleDrawerToggle = () => {
@@ -15,14 +65,14 @@ const Navbar = () => {
   };
 
   return (
-    <div className="relative">
-      <div className="rounded-br-lg bg-red-50 navbar bg-base-100 drop-shadow-lg">
+    <div className="relative z-[10]">
+      <div className="rounded-br-lg bg-accent navbar   drop-shadow-lg">
         <div className=" navbar-start">
-          <div className="drawer">
+          <div className=" drawer">
             <input
               id="my-drawer"
               type="checkbox"
-              className="drawer-toggle"
+              className="drawer-toggle "
               checked={isDrawerOpen}
               onChange={handleDrawerToggle}
             />
@@ -48,16 +98,16 @@ const Navbar = () => {
                 </svg>
               </label>
             </div>
-            <div className="drawer-side">
+            <div className=" drawer-side">
               <label
                 htmlFor="my-drawer"
                 aria-label="close sidebar"
-                className="drawer-overlay"
+                className="drawer-overlay "
                 onClick={handleDrawerClose}
               ></label>
-              <ul className="menu w-72 bg-white min-h-full bg-base-200 text-base-content text-xl">
+              <ul className="menu w-72 bg-white border-2 border-accent min-h-full  text-base-content text-xl">
                 {/* Sidebar content here */}
-                <div className="flex gap-6 justify-center items-center">
+                <div className="flex  gap-6 justify-center items-center">
                   <img
                     className="mb-4 mt-2"
                     src="data:image/png;base64,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"
@@ -67,8 +117,8 @@ const Navbar = () => {
                   />
                 </div>
                 <li>
-                  <a className="btn btn-lg btn-outline mb-8 font-bold shadow-md">
-                    <Link to="/dashboard">
+                  <a className="btn btn-lg btn-outline border-2  border-accent  mb-8 font-bold shadow-md">
+                    <Link to="dashboard">
                       <label className="flex flex-col items-center">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -91,8 +141,8 @@ const Navbar = () => {
                   </a>
                 </li>
                 <li>
-                  <a className="btn btn-lg btn-outline mb-8 font-bold shadow-md">
-                    <Link to="/role">
+                  <a className="btn btn-lg btn-outline border-2  border-accent mb-8 font-bold shadow-md">
+                    <Link to="role">
                       <label className="flex flex-col items-center">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -115,8 +165,8 @@ const Navbar = () => {
                   </a>
                 </li>
                 <li>
-                  <a className="btn btn-outline btn-lg mb-8 font-bold shadow-md">
-                    <Link to="/employee">
+                  <a className="btn btn-outline border-2  border-accent btn-lg mb-8 font-bold shadow-md">
+                    <Link to="employee">
                       <label className="flex flex-col items-center ">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -137,8 +187,8 @@ const Navbar = () => {
                   </a>
                 </li>
                 <li>
-                  <a className="btn btn-outline btn-lg mb-8 font-bold shadow-md">
-                    <Link to="/empDetail">
+                  <a className="btn btn-outline border-2  border-accent btn-lg mb-8 font-bold shadow-md">
+                    <Link to="empDetail">
                       <label className="flex flex-col items-center ">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -161,8 +211,8 @@ const Navbar = () => {
                   </a>
                 </li>
                 <li>
-                  <a className="btn btn-outline btn-lg mb-8 font-bold shadow-md">
-                    <Link to="/patient">
+                  <a className="btn btn-outline border-2  border-accent btn-lg mb-8 font-bold shadow-md">
+                    <Link to="patient">
                       <label className="flex flex-col items-center ">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -172,10 +222,6 @@ const Navbar = () => {
                           height="24"
                           width="24"
                         >
-                          <desc>
-                            {/* Radiology Scan Doctor Streamline Icon:
-                            https://streamlinehq.com */}
-                          </desc>
                           <path
                             stroke="#000000"
                             stroke-linecap="round"
@@ -233,8 +279,8 @@ const Navbar = () => {
                   </a>
                 </li>
                 <li>
-                  <a className="btn btn-outline btn-lg mb-8 font-bold shadow-md">
-                    <Link to="/room">
+                  <a className="btn btn-outline border-2  border-accent btn-lg mb-8 font-bold shadow-md">
+                    <Link to="room">
                       <label className="flex flex-col items-center ">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -257,8 +303,8 @@ const Navbar = () => {
                   </a>
                 </li>
                 <li>
-                  <a className="btn btn-outline btn-lg mb-8 font-bold shadow-md">
-                    <Link to="/department">
+                  <a className="btn btn-outline border-2  border-accent btn-lg mb-8 font-bold shadow-md">
+                    <Link to="department">
                       <label className="flex flex-col items-center ">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -277,8 +323,8 @@ const Navbar = () => {
                   </a>
                 </li>
                 <li>
-                  <a className="btn btn-outline btn-lg mb-8 font-bold shadow-md">
-                    <Link to="/roleAssign">
+                  <a className="btn btn-outline border-2  border-accent btn-lg mb-8 font-bold shadow-md">
+                    <Link to="roleAssign">
                       <label className="flex flex-col items-center ">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -300,35 +346,45 @@ const Navbar = () => {
             </div>
           </div>
         </div>
-        <div className="navbar-center">
-          <a className="btn btn-ghost  text-2xl font-bold">SIGMA HEALTHCARE</a>
+        <div className="navbar-center ">
+          <a className="btn btn-ghost  text-2xl font-bold">MAYO HEALTHCARE</a>
         </div>
-        <div className="navbar-end">
-          <button className="btn btn-ghost btn-circle" aria-label="Search">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+        <div className="navbar-end z-[50] ">
+          <div className="avatar dropdown z-50 dropdown-end dropdown-hover">
+            <div
+              tabIndex={0}
+              role="button"
+              className="ring-primary ring-2 ring-success w-12 mr-5 rounded-full"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-          </button>
+              <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+            </div>
+            <ul
+              tabIndex={0}
+              className="dropdown-content border-2  border-success mt-2 menu bg-base-100 rounded-box z-[10] w-52 p-2 shadow"
+            >
+              <li>
+                <a className="text-m">{data.email}</a>
+              </li>
+              <li>
+                <a className="text-l font-bold">{data.name}</a>
+              </li>
+              <li>
+                <button
+                  className="mr-4 mt-2 btn btn-xs btn-error"
+                  onClick={logout}
+                >
+                  Log Out
+                </button>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
 
       {/* Example table */}
       <div className={`table-container ${isDrawerOpen ? "drawer-open" : ""}`}>
-        <table className="table mt-12 mr-6">
+        <table className="table z-[1]  mt-6 mr-6">
           <Outlet />
-          {/* <Department/> */}
-          {/* <RegistrationForm/> */}
         </table>
       </div>
 

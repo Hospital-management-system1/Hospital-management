@@ -10,9 +10,9 @@ const {
 } = require("../../controller/empRegisterController/empRegister");
 
 empRegisterRouter.get("/getEmp", getEmp);
+empRegisterRouter.post("/postEmp", upload.single("image"), Validation, postEmp);
 // empRegisterRouter.post('/postEmp',Validation,postEmp);
 empRegisterRouter.patch("/updateEmp/:emp_id", updateEmp);
 empRegisterRouter.delete("/deleteEmp/:id", deleteEmp);
-empRegisterRouter.post("/postEmp", upload.single("image"), Validation, postEmp);
 
 module.exports = empRegisterRouter;
