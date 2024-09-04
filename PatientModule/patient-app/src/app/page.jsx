@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Loader from "./serverComponent/loader";
-
+import Modal from "./component/Modal"
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -78,10 +78,13 @@ export default function Home() {
                 <Link href="#facilities">Facilities & Services</Link>
               </li>
               <li>
-              <Link href="#review">Reviews</Link>
+                <Link href="#review">Reviews</Link>
               </li>
               <li>
-                <a>Contact Us</a>
+                <Link href="#contactus">Contact Us</Link>
+              </li>
+              <li>
+                <Link href="#contactus">Login</Link>
               </li>
             </ul>
           </div>
@@ -102,9 +105,17 @@ export default function Home() {
           <Link href="#review" className="btn btn-ghost text-xl">
             Reviews
           </Link>
-
+          <Link href="#contactus" className="btn btn-ghost text-xl">
+            Contact Us
+          </Link>
+          <button
+              onClick={() => router.push("/patientDetail")}
+              className="btn btn-ghost text-xl 
+             text-white  transition ease-in-out delay-150   hover:-translate-y-1 hover:scale-110 hover:bg-accent duration-300"
+            >
+              Login
+            </button>
           
-          <a className="btn btn-ghost text-xl">Contact Us</a>
         </div>
 
         <div className="navbar-end">
@@ -119,6 +130,7 @@ export default function Home() {
       </div>
       {/* Home section */}
       <div
+       id="home"
         className="hero min-h-screen"
         style={{
           backgroundImage: `url(${images[currentImageIndex]})`,
@@ -140,13 +152,14 @@ export default function Home() {
               Effective treatment depends on getting the right diagnosis. Our
               experts diagnose and treat the toughest medical challenges.
             </p>
-            <button
-              onClick={()=>router.push("/appointment")}
+            {/* <button
+              onClick={() => router.push("/appointment")}
               className="btn bg-glass 
              text-white btn-outline transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-110 hover:bg-accent duration-300"
             >
               Get Appointment
-            </button>
+            </button> */}
+            <Modal />
           </div>
         </div>
       </div>
@@ -514,7 +527,7 @@ export default function Home() {
         </div>
       </div>
 
-      <footer className="footer text-white bg-accent p-10 grid grid-cols-1 md:grid-cols-3 gap-10">
+      <footer id="contactus" className="footer text-white bg-accent p-10 grid grid-cols-1 md:grid-cols-3 gap-10">
         <nav>
           <h6 className="footer-title text-xl">Services</h6>
           <a className="link link-hover">Branding</a>

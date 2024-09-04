@@ -5,16 +5,14 @@ import cookie from "cookie";
 export async function GET(req) {
   const cookies = cookie.parse(req.headers.get("cookie") || "");
   const token = cookies.token;
-
   if (!token) {
     return NextResponse.json({ error: "Token not found" }, { status: 400 });
   }
-
   try {
     const decodedToken = jwt.verify(token, "jwt-secret-key");
-    console.log(decodedToken.email);
     const email = decodedToken.email;
-    return NextResponse.json(email, { status: 200 });
+    const emp_id = decodedToken.emp_id;
+    return NextResponse.json({emp_id, email}, { status: 200 });
   } catch (error) {
     console.error("Server error:", error);
     return NextResponse.json(

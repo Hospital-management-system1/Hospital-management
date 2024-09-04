@@ -8,6 +8,18 @@ const getEmp = (req, res) => {
   });
 };
 
+const getDoctors = (req, res) => {
+  let sql = `SELECT er.emp_id, er.emp_name, er.email
+FROM emp_register er
+JOIN role_assign ra ON er.emp_id = ra.emp_id
+JOIN role r ON ra.role_id = r.role_id
+WHERE r.role_name = 'Doctor';`;
+  connection.query(sql, (error, result) => {
+    if (error) console.log("ERROR...", error.sqlMessage);
+    else res.send(result.rows);
+  });
+};
+
 const postEmp = (req, res) => {
   var fullUrl = req.protocol + "://" + req.get("host") + "/images/";
   let data = {
@@ -15,8 +27,7 @@ const postEmp = (req, res) => {
     emp_name: req.body.emp_name,
     email: req.body.email,
     password: req.body.password,
-    img: fullUrl+req.file.filename,
-    
+    img: fullUrl + req.file.filename,
   };
   let values = [
     data.emp_id,
@@ -24,7 +35,6 @@ const postEmp = (req, res) => {
     data.email,
     data.password,
     data.img,
-    
   ];
   let sql =
     "INSERT INTO emp_register (emp_id, emp_name, email, password, img) VALUES ($1, $2, $3, $4, $5)";
@@ -49,9 +59,9 @@ const deleteEmp = (req, res) => {
   let data = req.params.id;
   let sql = "DELETE FROM emp_register WHERE emp_id = $1";
   connection.query(sql, [data], (error, result) => {
-    if (error) console.log("error...", error.sqlMessage);
+    if (error) console.log("error...", error);
     else res.send(result);
   });
 };
 
-module.exports = { getEmp, postEmp, updateEmp, deleteEmp };
+module.exports = { getEmp, postEmp, updateEmp, deleteEmp, getDoctors };

@@ -24,6 +24,8 @@ const empDetailRouter = require("./routes/empDetailRoute/empDetailsRoute.js");
 const patientRouter = require("../backend/routes/patientRoute/patientRoute.js");
 const presRouter = require("../backend/routes/prescriptionRoute/presRoute.js");
 const loginRouter = require("../backend/routes/loginRoutes/loginRoutes.js");
+const appointmentRouter = require("../backend/routes/appointmentRoute/appointmentRoute.js")
+
 
 app.use("/", loginRouter);
 app.use("/", roomRouter);
@@ -36,6 +38,7 @@ app.use("/", roleAssignRouter);
 app.use("/", empDetailRouter);
 app.use("/", patientRouter);
 app.use("/", presRouter);
+app.use("/", appointmentRouter);
 
 const option = {
   definition: {

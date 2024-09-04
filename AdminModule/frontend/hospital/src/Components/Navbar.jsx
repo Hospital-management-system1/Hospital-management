@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import { Outlet, Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -8,6 +8,34 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const [data, setData] = useState({});
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [zIndex, setZIndex] = useState("z-[1]");
+  const dropdownRef = useRef(null);
+
+  const handleDropdownToggle = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isDropdownOpen) {
+      setZIndex("z-[-1]");
+    } else {
+      setZIndex("z-[10]");
+    }
+  }, [isDropdownOpen]);
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     axios
@@ -15,13 +43,13 @@ const Navbar = () => {
       .then((result) => {
         if (result.data.message === "Success") {
           setData(result.data);
-          Swal.fire({
-            position: "top",
-            icon: "success",
-            title: "Successfully Loged In",
-            showConfirmButton: false,
-            timer: 1000,
-          });
+          // Swal.fire({
+          //   position: "top",
+          //   icon: "success",
+          //   title: "Successfully Loged In",
+          //   showConfirmButton: false,
+          //   timer: 1000,
+          // });
         } else {
           navigate("/");
         }
@@ -350,40 +378,43 @@ const Navbar = () => {
           <a className="btn btn-ghost  text-2xl font-bold">MAYO HEALTHCARE</a>
         </div>
         <div className="navbar-end z-[50] ">
-          <div className="avatar dropdown z-50 dropdown-end dropdown-hover">
+          <div className="avatar dropdown z-50 dropdown-end " ref={dropdownRef}>
             <div
               tabIndex={0}
               role="button"
+              onClick={handleDropdownToggle}
               className="ring-primary ring-2 ring-success w-12 mr-5 rounded-full"
             >
               <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
             </div>
-            <ul
-              tabIndex={0}
-              className="dropdown-content border-2  border-success mt-2 menu bg-base-100 rounded-box z-[10] w-52 p-2 shadow"
-            >
-              <li>
-                <a className="text-m">{data.email}</a>
-              </li>
-              <li>
-                <a className="text-l font-bold">{data.name}</a>
-              </li>
-              <li>
-                <button
-                  className="mr-4 mt-2 btn btn-xs btn-error"
-                  onClick={logout}
-                >
-                  Log Out
-                </button>
-              </li>
-            </ul>
+            {isDropdownOpen && (
+              <ul
+                tabIndex={0}
+                className="dropdown-content border-2  border-success mt-2 menu bg-base-100 rounded-box z-[10] w-52 p-2 shadow"
+              >
+                <li>
+                  <a className="text-m">{data.email}</a>
+                </li>
+                <li>
+                  <a className="text-l font-bold">{data.name}</a>
+                </li>
+                <li>
+                  <button
+                    className="mr-4 mt-2 btn btn-xs btn-error"
+                    onClick={logout}
+                  >
+                    Log Out
+                  </button>
+                </li>
+              </ul>
+            )}
           </div>
         </div>
       </div>
 
       {/* Example table */}
       <div className={`table-container ${isDrawerOpen ? "drawer-open" : ""}`}>
-        <table className="table z-[1]  mt-6 mr-6">
+        <table className={`table mt-6 mr-6 ${zIndex}`}>
           <Outlet />
         </table>
       </div>

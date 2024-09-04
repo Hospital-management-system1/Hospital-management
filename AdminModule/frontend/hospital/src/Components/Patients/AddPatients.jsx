@@ -8,7 +8,7 @@ const AddPatients = () => {
   const [address, setAddress] = useState("");
   const [dob, setDob] = useState("");
   const [gender, setGender] = useState("");
-  const [symtoms, setSymtoms] = useState("");
+  const [symptoms, setSymptoms] = useState("");
 
   const postPatient = () => {
     let data = {
@@ -19,7 +19,7 @@ const AddPatients = () => {
       address,
       dob,
       gender,
-      symtoms,
+      symptoms,
     };
     fetch("http://localhost:5999/postPatient", {
       method: "POST",
@@ -147,13 +147,13 @@ const AddPatients = () => {
               </label>
 
               <label className="input input-bordered flex items-center gap-2 mb-2">
-                Symtoms
+                Symptoms
                 <input
                   type="text"
                   className="grow"
                   placeholder="Enter Symtoms"
                   onChange={(e) => {
-                    setSymtoms(e.target.value);
+                    setSymptoms(e.target.value);
                   }}
                 />
               </label>

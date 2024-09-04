@@ -7,8 +7,10 @@ import Swal from "sweetalert2";
 
 const Dashboard = () => {
   const [data1, setData] = useState([]);
-  const [doctorCount, setDoctorCount] = useState([]);
+  const [empCount, setEmpCount] = useState([]);
   const [patientCount, setPatientCount] = useState([]);
+  const [doctor, setDoctorCount] = useState([]);
+
 
   const [logdata, setLogData] = useState({});
   const navigate = useNavigate();
@@ -21,10 +23,18 @@ const Dashboard = () => {
     });
   }
 
+  function getDoctor(){
+    fetch(`http://localhost:5999/getdoctors`).then((result)=>{
+      result.json().then((resp)=>{
+        setDoctorCount(resp);
+      })
+    })
+  }
+
   function getDoctorData() {
     fetch("http://localhost:5999/getEmp").then((result) => {
       result.json().then((resp) => {
-        setDoctorCount(resp);
+        setEmpCount(resp);
       });
     });
   }
@@ -39,6 +49,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     getData();
+    getDoctor();
     getDoctorData();
     getPatientData();
   }, []);
@@ -48,7 +59,7 @@ const Dashboard = () => {
     datasets: [
       {
         label: "Count",
-        data: [doctorCount.length, doctorCount.length, patientCount.length],
+        data: [empCount.length, doctor.length, patientCount.length],
         backgroundColor: ["#FF6384", "#36A2EB"],
       },
     ],
@@ -72,7 +83,7 @@ const Dashboard = () => {
             </svg>
           </div>
           <p className="text-center text-xl font-semibold text-gray-800">
-            {doctorCount.length}
+            {doctor.length}
           </p>
         </div>
 

@@ -9,13 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.629.0",
     "axios": "^1.7.3",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "clsx": "^2.1.1",
     "cookie": "^0.6.0",
+    "dropzone": "^6.0.0-beta.2",
     "framer-motion": "^11.3.21",
     "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
+    "mime-types": "^2.1.35",
     "next": "14.2.5",
     "pg": "^8.12.0",
     "preline": "^2.4.1",

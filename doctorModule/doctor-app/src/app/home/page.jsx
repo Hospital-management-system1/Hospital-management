@@ -32,7 +32,7 @@ const Board = () => {
     <div className="mt-2 p-2">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-2">
 
-        <div className=" p-10 bg-ow border-2 border-solid border-dashed rounded-lg shadow-lg">
+        <div className=" p-10 bg-[#F6BABA] border-2 border-solid  rounded-lg shadow-lg">
           <div className="flex items-center justify-center mb-2">
             <h3 className="text-3xl font-semibold mr-2">Doctors</h3>
             <svg
@@ -51,7 +51,7 @@ const Board = () => {
           </p>
         </div>
 
-        <div className="p-10 bg-purple  border-2 border-solid border-dashed   rounded-lg shadow-lg">
+        <div className="p-10 bg-purple  border-2 border-solid    rounded-lg shadow-lg">
           <div className="flex items-center justify-center mb-2">
             <h3 className="text-3xl font-semibold mr-2">Operations</h3>
             <svg
@@ -70,7 +70,7 @@ const Board = () => {
           </p>
         </div>
 
-        <div className=" bg-blue border-2 border-solid border-dashed p-10 rounded-lg shadow-lg">
+        <div className=" bg-blue border-2 border-solid  p-10 rounded-lg shadow-lg">
           <div className="flex  items-center justify-center mb-2">
             <h3 className="text-3xl font-semibold mr-2">Patients Records</h3>
             <svg
@@ -89,7 +89,7 @@ const Board = () => {
           </p>
         </div>
 
-        <div className=" bg-pink border-2 border-solid border-dashed p-10 rounded-lg shadow-lg">
+        <div className=" bg-pink border-2 border-solid  p-10 rounded-lg shadow-lg">
           <div className="flex items-center justify-center mb-2">
             <h3 className="text-3xl font-semibold mr-2">Appointments</h3>
             <svg

@@ -4,10 +4,10 @@ import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { PostContext } from "../context/PostContext";
+import Dropzone from "dropzone";
 
 export default function HomeLayout({ children }) {
-
-  const { email } = useContext(PostContext);
+  const { userData, setUserdata } = useContext(PostContext);
 
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
@@ -50,9 +50,10 @@ export default function HomeLayout({ children }) {
         if (data?.error) {
           console.error(data.error);
         } else {
-          const email = data; // Assuming email is the first element
-          console.log("User email:", email);
-          // setEmail(email);
+          const email = data.email;
+          const emp_id = data.emp_id;
+          console.log("User email:", email, emp_id);
+          setUserdata(data);
         }
       })
       .catch((error) => {
@@ -70,7 +71,7 @@ export default function HomeLayout({ children }) {
         } w-64 bg-base-300 p-4 transition-transform duration-300 ease-in-out z-20`}
       >
         <ul className="menu p-4  text-base-content font-semibold text-xl pt-16  h-full ">
-          <li className="m-2 border-double	border-error border-2 shadow-xl bg-base-100">
+          <li className="m-2 	border-solid border-2 shadow-xl bg-base-100">
             <Link href="/home">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -84,7 +85,7 @@ export default function HomeLayout({ children }) {
               Dashboard
             </Link>
           </li>
-          <li className="m-2 border-double	border-error border-2 shadow-xl">
+          <li className="m-2 	border-solid	border-solid bg-base-100 border-2 shadow-xl">
             <Link href="/home/appointment">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -167,13 +168,21 @@ export default function HomeLayout({ children }) {
               </label>
               <ul
                 tabIndex={0}
-                className="menu menu-sm dropdown-content shadow-lg bg-base-100 rounded-box z-[10] mt-2  border border-2 border-solid border-error w-52 p-2 shadow"
+                className="menu menu-sm dropdown-content shadow-lg bg-base-100 rounded-box z-[10] mt-2  border border-2 border-solid border-error w-52  p-2 shadow"
               >
                 <li>
-                  <a className="justify-between font-semibold  ">{email}</a>
+                  <a className="justify-between font-semibold ">
+                    {userData.emp_id}
+                  </a>
+                </li>
+                
+                <li>
+                  <a className="justify-between font-semibold ">
+                    {userData.email}
+                  </a>
                 </li>
 
-                <li className=" ">
+                <li className="mt-2 ">
                   <button
                     className="btn btn-error  btn-outline btn-sm mx-8 mt-2 "
                     onClick={handleLogout}

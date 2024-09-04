@@ -21,7 +21,6 @@ export default function RootLayout({
           <div>{children}</div>
         </PostProvider>
       </body>
-
     </html>
   );
 }

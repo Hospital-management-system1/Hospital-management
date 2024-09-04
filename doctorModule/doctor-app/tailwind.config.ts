@@ -18,7 +18,8 @@ const config: Config = {
       'gray-dark': '#273444',
       'gray': '#64748B',
       'gray-light': '#d3dce6',
-      'ow':'#FFC6C6'
+      'ow':'#FFC6C6',
+      'neon':'#4deeea'
     },
     extend: {
       backgroundImage: {

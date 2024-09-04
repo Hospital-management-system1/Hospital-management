@@ -7,10 +7,12 @@ const {
   postEmp,
   updateEmp,
   deleteEmp,
+  getDoctors
 } = require("../../controller/empRegisterController/empRegister");
 
 empRegisterRouter.get("/getEmp", getEmp);
-empRegisterRouter.post("/postEmp", upload.single("image"), Validation, postEmp);
+empRegisterRouter.get("/getdoctors", getDoctors);
+empRegisterRouter.post("/postEmp", upload.single("image"),  postEmp);
 // empRegisterRouter.post('/postEmp',Validation,postEmp);
 empRegisterRouter.patch("/updateEmp/:emp_id", updateEmp);
 empRegisterRouter.delete("/deleteEmp/:id", deleteEmp);

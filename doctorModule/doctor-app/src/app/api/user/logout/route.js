@@ -17,7 +17,9 @@ export async function POST(req) {
     console.error("Error during logout:", error);
     return NextResponse.json(
       { Err: "Logout error in server" },
-      { status: 500 }
-    );
-  }
+      { status: 500 }
+    );
+  }
 }
+
+
