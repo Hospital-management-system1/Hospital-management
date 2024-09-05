@@ -1,54 +1,80 @@
 "use client";
-import React, { useEffect, useMemo, useState, useCallback } from "react";
-import {
-  useTable,
-  useSortBy,
-  usePagination,
-  useGlobalFilter,
-} from "react-table";
+import React, { useEffect, useContext, useMemo, useState } from "react";
+import { PostContext } from "../../context/PostContext";
+import { useTable, useSortBy, usePagination, useGlobalFilter } from "react-table";
 
+const Patient= () => {
+  const [data, setData] = useState([]);  
+  const { userData } = useContext(PostContext);
 
-const Department = () => {
-  const [data, setData] = useState([]);
-
+  // Define the columns for the table
   const columns = useMemo(
     () => [
       {
-        Header: "Serial Number",
-        Cell: ({ row }) => row.index + 1,
+        Header: "Patient ID",
+        accessor: "patient_id", // maps to patient_id in the fetched data
       },
       {
-        Header: "Department ID",
-        accessor: "dept_id",
+        Header: "Name",
+        accessor: "name", 
       },
       {
-        Header: "Department Name",
-        accessor: "dept_name",
+        Header: "Age",
+        accessor: "age",
       },
       {
-        Header: "Room ID",
-        accessor: "room_id",
+        Header: "Contact",
+        accessor: "contact",
+      },
+      // {
+      //   Header: "Emergency Contact",
+      //   accessor: "emgc_contact", // maps to emgc_contact in the fetched data
+      // },
+      {
+        Header: "Address",
+        accessor: "address", 
+      },
+      // {
+      //   Header: "Date of Birth",
+      //   accessor: "dob", 
+      //   Cell: ({ value }) => {
+      //     // Convert the ISO date string to just the date
+      //     const date = new Date(value);
+      //     return date.toISOString().split('T')[0]; 
+      //   },
+      // },
+      {
+        Header: "Gender",
+        accessor: "gender", 
       },
       {
-        Header: "Actions",
-        Cell: ({ row }) => (
-          <div className="flex items-center justify-center">
-            {/* <EditDepartment dept_id = {row.original.dept_id}/> */}
-          </div>
-        ),
+        Header: "Symptoms",
+        accessor: "symptoms",
+      },
+      {
+        Header: "Email",
+        accessor: "email",
       },
     ],
     []
   );
 
-  // useEffect(() => {
-  //   fetch("http://localhost:5999/getDepartment")
-  //     .then((res) => res.json())
-  //     .then((result) => {
-  //       setData(result);
-  //     });
-  // }, []);
+  const emp_id = userData?.emp_id;
+  console.log(emp_id);
 
+
+  useEffect(() => {
+    if (emp_id) {
+      fetch(`http://localhost:3000/api/user/login?emp_id=${emp_id}`)
+        .then((res) => res.json())
+        .then((result) => {
+          console.log(result);
+          setData(result); 
+        });
+    }
+  }, [emp_id]);
+
+  
   const {
     getTableProps,
     getTableBodyProps,
@@ -68,15 +94,14 @@ const Department = () => {
   } = useTable({ columns, data }, useGlobalFilter, useSortBy, usePagination);
 
   const { pageIndex, pageSize, globalFilter } = state;
-
+  
   return (
     <div className="px-4 py-2 sm:px-8 sm:py-4 lg:px-12 lg:py-6">
       <div className="table-container border border-gray-300 rounded-lg overflow-x-auto">
         <div className="flex flex-col sm:flex-row justify-between items-center mx-4 mt-2 pb-2">
-          <h1 className="text-xl font-semibold">Department</h1>
-          {/* add department */}
-          {/* <AddDepartment/> */}
+          <h1 className="text-xl font-semibold">Patient Details</h1>
         </div>
+
         <div className="flex flex-col sm:flex-row items-center justify-between pb-2 mx-4 mt-2">
           <div className="flex items-center gap-1 mb-2 sm:mb-0">
             <span>Show</span>
@@ -93,6 +118,7 @@ const Department = () => {
             </select>
             <span>Entries</span>
           </div>
+
           <div className="flex items-center gap-2">
             <label className="flex items-center gap-2 input input-sm input-bordered">
               <input
@@ -117,6 +143,7 @@ const Department = () => {
             </label>
           </div>
         </div>
+
         <div className="overflow-x-auto">
           <table {...getTableProps()} className="table">
             <thead>
@@ -127,54 +154,7 @@ const Department = () => {
                       {...column.getHeaderProps(column.getSortByToggleProps())}
                       className="text-center text-base"
                     >
-                      <div className="flex items-center justify-center">
-                        {column.render("Header")}
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 16 16"
-                          fill="currentColor"
-                          className="w-4 h-4 ml-1"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M5.22 10.22a.75.75 0 0 1 1.06 0L8 11.94l1.72-1.72a.75.75 0 1 1 1.06 1.06l-2.25 2.25a.75.75 0 0 1-1.06 0l-2.25-2.25a.75.75 0 0 1 0-1.06ZM10.78 5.78a.75.75 0 0 1-1.06 0L8 4.06 6.28 5.78a.75.75 0 0 1-1.06-1.06l2.25-2.25a.75.75 0 0 1 1.06 0l2.25 2.25a.75.75 0 0 1 0 1.06Z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                        <span className="ml-2">
-                          {column.isSorted ? (
-                            column.isSortedDesc ? (
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                className="w-5 h-5"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
-                                  clipRule="evenodd"
-                                />
-                              </svg>
-                            ) : (
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                className="w-5 h-5"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  d="M9.47 6.47a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 1 1-1.06 1.06L10 8.06l-3.72 3.72a.75.75 0 0 1-1.06-1.06l4.25-4.25Z"
-                                  clipRule="evenodd"
-                                />
-                              </svg>
-                            )
-                          ) : (
-                            ""
-                          )}
-                        </span>
-                      </div>
+                      {column.render("Header")}
                     </th>
                   ))}
                 </tr>
@@ -195,6 +175,7 @@ const Department = () => {
               })}
             </tbody>
           </table>
+
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-4 py-2">
             <div>
               <span>
@@ -210,18 +191,7 @@ const Department = () => {
                 onClick={() => gotoPage(0)}
                 disabled={!canPreviousPage}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  className="w-5 h-5"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M4.72 9.47a.75.75 0 0 0 0 1.06l4.25 4.25a.75.75 0 1 0 1.06-1.06L6.31 10l3.72-3.72a.75.75 0 1 0-1.06-1.06L4.72 9.47Zm9.25-4.25L9.72 9.47a.75.75 0 0 0 0 1.06l4.25 4.25a.75.75 0 1 0 1.06-1.06L11.31 10l3.72-3.72a.75.75 0 0 0-1.06-1.06Z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+                {"<<"}
               </button>
               <button
                 className="btn btn-outline btn-primary btn-sm"
@@ -242,18 +212,7 @@ const Department = () => {
                 onClick={() => gotoPage(pageCount - 1)}
                 disabled={!canNextPage}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  className="w-5 h-5"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M15.28 9.47a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 1 1-1.06-1.06L13.69 10l-3.72-3.72a.75.75 0 0 1 1.06-1.06l4.25 4.25ZM6.03 5.22l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L8.69 10 4.97 6.28a.75.75 0 0 1 1.06-1.06Z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+                {">>"}
               </button>
             </div>
           </div>
@@ -263,4 +222,4 @@ const Department = () => {
   );
 };
 
-export default Department;
+export default Patient

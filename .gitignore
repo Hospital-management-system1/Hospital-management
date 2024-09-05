@@ -1,5 +1,7 @@
 /AdminModule/backend/node_modules
 /AdminModule/frontend/hospital/node_modules
-
-/DoctorModule/hospital-app/node_modules
+/doctorModule/doctor-app/node_modules
+/doctorModule/doctor-app/.next
 /PatientModule/patient-app/node_modules
+/PatientModule/patient-app/.next
+

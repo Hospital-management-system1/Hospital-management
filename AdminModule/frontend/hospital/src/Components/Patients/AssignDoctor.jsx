@@ -89,7 +89,7 @@ const AssignDoctor = (props) => {
         <div
           tabIndex={0}
           role="button"
-          className="btn btn-sm btn-secondary btn-outline m-1"
+          className="btn btn-sm btn-success btn-outline m-1"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -121,7 +121,7 @@ const AssignDoctor = (props) => {
             </button>
           </li>
 
-          <li>
+          {/* <li>
             <button
               className="btn btn btn-sm mb-1 btn-outline btn-accent"
               onClick={() =>
@@ -132,7 +132,7 @@ const AssignDoctor = (props) => {
             >
               Update Doctor
             </button>
-          </li>
+          </li> */}
         </ul>
       </div>
       {/* Role add modal */}

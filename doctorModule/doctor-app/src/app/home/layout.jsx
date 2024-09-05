@@ -52,7 +52,7 @@ export default function HomeLayout({ children }) {
         } else {
           const email = data.email;
           const emp_id = data.emp_id;
-          console.log("User email:", email, emp_id);
+          // console.log("User email:", email,"Employee Id:", emp_id);
           setUserdata(data);
         }
       })

@@ -137,7 +137,7 @@ const Patients = () => {
       <div className="table-container border border-gray-300 rounded-lg mx-8">
         <div className="flex justify-between items-center mx-20 mt-2 pb-2 shadow-sm">
           <h1 className="text-xl font-semibold items-center">Patients</h1>
-          <AddPatients getData={getData} />
+          {/* <AddPatients getData={getData} /> */}
         </div>
         <div className="flex items-center justify-end pb-2 mx-20 mt-2 shadow-sm">
           <div className="flex items-center gap-1 mr-4">
